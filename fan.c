@@ -79,10 +79,10 @@ int main(int argc, char **argv){
 	lineBuffer = malloc(fileLen + 1);
 	cmdBuffer = malloc(fileLen + 1);
 	argBuffer = malloc(fileLen + 1);
-
+	printf("Debug0\n");
 	while(filePos < fileLen -1){
 		fgets(lineBuffer, fileLen, confFile);
-		printf("reading...");
+		printf("reading...\n");
 		if(lineBuffer[0] != '#'){
 			cmdBuffer = strtok(lineBuffer, " ");
 			argBuffer = strtok(NULL, " ");
