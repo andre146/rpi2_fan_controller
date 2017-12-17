@@ -51,8 +51,8 @@ int main(int argc, char **argv){
 	int setTemp = atoi(argv[1]);
 	int effort = 0;
 	int sleepTime = SLEEP_TIME;
-	int lowestError = LOWEST_ERROR;
 	char fanPin = FAN_PIN;
+	float lowestError = LOWEST_ERROR;
 	float error = 0;
 	float errorSum = 0;
 	float propEffort = 0;
@@ -92,11 +92,11 @@ int main(int argc, char **argv){
 			} else if (strcmp(cmdBuffer, "fanPin") == 0){
 				fanPin = atoi(argBuffer);
 			} else if (strcmp(cmdBuffer, "propGain") == 0){
-                                propGain = atoi(argBuffer);
+                                propGain = atof(argBuffer);
                         } else if (strcmp(cmdBuffer, "intGain") == 0){
-                                intGain = atoi(argBuffer);
+                                intGain = atof(argBuffer);
                         } else if (strcmp(cmdBuffer, "lowestError") == 0){
-                                lowestError = atoi(argBuffer);
+                                lowestError = atof(argBuffer);
                         }
 		}
 
@@ -106,6 +106,12 @@ int main(int argc, char **argv){
 	free(cmdBuffer);
 	free(argBuffer);
 	fclose(inFile);
+
+	printf("Fan Pin: %i\n", fanPin);
+	printf("Sleeptime: %i\n", sleepTime);
+	printf("Proportional gain: %f\n", propGain);
+	printf("Integral gain: %f\n", intGain);
+	printf("Lowest Error: %f\n", lowestError);
 
 	signal(SIGINT, cleanup);
         wiringPiSetup();
