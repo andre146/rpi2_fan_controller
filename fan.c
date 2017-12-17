@@ -21,7 +21,6 @@ float getTemp(){
 
 	FILE *tempFile = fopen(TEMPFILE_PATH, "r");
 	char buffer[TEMP_STRING_LEN + 1];
-	float temp;
 
 	if(tempFile == NULL){
 		return(-1);
