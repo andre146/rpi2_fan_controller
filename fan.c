@@ -11,7 +11,7 @@
 #define FAN_PIN 1
 #define PWM_RANGE 1024
 #define SLEEP_TIME 3
-#define LOWEST_ERROR -3
+#define LOWEST_ERROR -5
 #define CONFIGFILE_PATH "fan.conf"
 #define LINE_BUF_LEN 1024
 
