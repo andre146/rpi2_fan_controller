@@ -79,7 +79,7 @@ int main(int argc, char **argv){
 	cmdBuffer = malloc(fileLen + 1);
 	argBuffer = malloc(fileLen + 1);
 	printf("Debug0\n");
-	while(filePos < fileLen -1){
+	while(filePos < fileLen - 1){
 		fgets(lineBuffer, fileLen, confFile);
 		printf("reading...\n");
 		if(lineBuffer[0] != '#'){
