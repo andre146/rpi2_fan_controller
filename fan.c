@@ -81,7 +81,7 @@ int main(int argc, char **argv){
 	argBuffer = malloc(fileLen + 1);
 
 	while(filePos < fileLen -1){
-		fgets(lineBuffer, fileLen, inFile);
+		fgets(lineBuffer, fileLen, confFile);
 
 		if(lineBuffer[0] != '#'){
 			cmdBuffer = strtok(lineBuffer, " ");
@@ -105,7 +105,7 @@ int main(int argc, char **argv){
 	free(lineBuffer);
 	free(cmdBuffer);
 	free(argBuffer);
-	fclose(inFile);
+	fclose(confFile);
 
 	printf("Fan Pin: %i\n", fanPin);
 	printf("Sleeptime: %i\n", sleepTime);
