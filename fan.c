@@ -88,14 +88,19 @@ int main(int argc, char **argv){
 
 			if(strcmp(cmdBuffer, "sleep") == 0){
 				sleepTime = atoi(argBuffer);
+				printf("Sleeptime: %i\n", sleepTime);
 			} else if (strcmp(cmdBuffer, "fanPin") == 0){
 				fanPin = atoi(argBuffer);
+				printf("Fan Pin: %i\n", fanPin);
 			} else if (strcmp(cmdBuffer, "propGain") == 0){
                                 propGain = (float)atof(argBuffer);
+				printf("Proportional gain: %f\n", propGain);
                         } else if (strcmp(cmdBuffer, "intGain") == 0){
                                 intGain = (float)atof(argBuffer);
+				printf("Integral gain: %f\n", intGain);
                         } else if (strcmp(cmdBuffer, "lowestError") == 0){
                                 lowestError = atof(argBuffer);
+				printf("Lowest Error: %f\n", lowestError);
                         }
 		}
 
