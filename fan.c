@@ -14,6 +14,8 @@
 #define LOWEST_ERROR -5
 #define CONFIGFILE_PATH "fan.conf"
 #define LINE_BUF_LEN 1024
+#define DEFAULT_PROP_GAIN 1
+#define DEFAULT_INT_GAIN 1
 
 float getTemp(){
 
@@ -48,29 +50,24 @@ int main(int argc, char **argv){
 
 	int setTemp = atoi(argv[1]);
 	int effort = 0;
-	int sleepTime = 5;
-	char fanPin = 1;
+	int sleepTime = SLEEP_TIME;
+	int lowestError = LOWEST_ERROR;
+	char fanPin = FAN_PIN;
 	float error = 0;
 	float errorSum = 0;
 	float propEffort = 0;
 	float intEffort = 0;
-	float propGain = 1;
-	float intGain = 1;
-
-	signal(SIGINT, cleanup);
-	wiringPiSetup();
-	pwmSetRange(PWM_RANGE);
-	//pwmSetClock(3840);
-	pwmSetMode(PWM_MODE_MS);
-	pinMode(fanPin, PWM_OUTPUT);
+	float propGain = DEFAULT_PROP_GAIN;
+	float intGain = DEFAULT_INT_GAIN;
 
 	printf("Starting PI-Based fan controller v1.0 by Andre Picker\n");
 
 	FILE *confFile = fopen(CONFIGFILE_PATH, "rb");
-	long fileLen;
-	char *fileBuffer;
+	long fileLen = 0;
+	long filePos = 0;
 	char *lineBuffer;
 	char *cmdBuffer;
+	char *argBuffer;
 	if(confFile == NULL){
 		printf("Failed to open config file fan.conf!\n");
 		return(1);
@@ -79,14 +76,43 @@ int main(int argc, char **argv){
 	fseek(confFile, 0, SEEK_END);
 	fileLen = ftell(confFile) + 1;
 	fseek(confFile, 0, SEEK_SET);
-	fileBuffer = malloc(fileLen + 1);
-	fread(fileBuffer, 1, fileLen, confFile);
-	fclose(confFile);
-	lineBuffer = malloc(LINE_BUF_LEN);
-	cmdBuffer = malloc(LINE_BUF_LEN);
+	lineBuffer = malloc(fileLen + 1);
+	cmdBuffer = malloc(fileLen + 1);
+	argBuffer = malloc(fileLen + 1);
 
-	lineBuffer = strtok(fileBuffer, "\n");
+	while(filePos < fileLen -1){
+		fgets(lineBuffer, fileLen, inFile);
 
+		if(lineBuffer[0] != '#'){
+			cmdBuffer = strtok(lineBuffer, " ");
+			argBuffer = strtok(NULL, " ");
+
+			if(strcmp(cmdBuffer, "sleep") == 0){
+				sleepTime = atoi(argBuffer);
+			} else if (strcmp(cmdBuffer, "fanPin") == 0){
+				fanPin = atoi(argBuffer);
+			} else if (strcmp(cmdBuffer, "propGain") == 0){
+                                propGain = atoi(argBuffer);
+                        } else if (strcmp(cmdBuffer, "intGain") == 0){
+                                intGain = atoi(argBuffer);
+                        } else if (strcmp(cmdBuffer, "lowestError") == 0){
+                                lowestError = atoi(argBuffer);
+                        }
+		}
+
+	}
+
+	free(lineBuffer);
+	free(cmdBuffer);
+	free(argBuffer);
+	fclose(inFile);
+
+	signal(SIGINT, cleanup);
+        wiringPiSetup();
+        pwmSetRange(PWM_RANGE);
+        //pwmSetClock(3840);
+        pwmSetMode(PWM_MODE_MS);
+        pinMode(fanPin, PWM_OUTPUT);
 
 	while(1){
 
