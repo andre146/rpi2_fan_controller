@@ -10,9 +10,9 @@
 #define FAN_PIN 1
 #define PWM_RANGE 1024
 #define SLEEP_TIME 3
-#define LOWEST_ERROR -3
+#define LOWEST_ERROR -5
 
-#define PROP_GAIN 1
+#define PROP_GAIN 1.1
 #define INT_GAIN 0.2
 
 float getTemp(){
