@@ -92,9 +92,9 @@ int main(int argc, char **argv){
 			} else if (strcmp(cmdBuffer, "fanPin") == 0){
 				fanPin = atoi(argBuffer);
 			} else if (strcmp(cmdBuffer, "propGain") == 0){
-                                propGain = atof(argBuffer);
+                                propGain = (float)atof(argBuffer);
                         } else if (strcmp(cmdBuffer, "intGain") == 0){
-                                intGain = atof(argBuffer);
+                                intGain = (float)atof(argBuffer);
                         } else if (strcmp(cmdBuffer, "lowestError") == 0){
                                 lowestError = atof(argBuffer);
                         }
