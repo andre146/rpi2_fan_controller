@@ -67,6 +67,7 @@ int main(int argc, char **argv){
 	char *lineBuffer;
 	char *cmdBuffer;
 	char *argBuffer;
+
 	if(confFile == NULL){
 		printf("Failed to open config file fan.conf!\n");
 		return(1);
@@ -78,35 +79,33 @@ int main(int argc, char **argv){
 	lineBuffer = malloc(fileLen + 1);
 	cmdBuffer = malloc(fileLen + 1);
 	argBuffer = malloc(fileLen + 1);
-	printf("Debug0\n");
+
 	while(filePos < fileLen - 1){
 		fgets(lineBuffer, fileLen, confFile);
-		printf("reading...\n");
+		filePos = ftell(confFile);
+
 		if(lineBuffer[0] != '#'){
 			cmdBuffer = strtok(lineBuffer, " ");
 			argBuffer = strtok(NULL, " ");
-
+			if(argBuffer == NULL || cmdBuffer == NULL){
+				continue;
+			}
 			if(strcmp(cmdBuffer, "sleep") == 0){
 				sleepTime = atoi(argBuffer);
-				printf("Sleeptime: %i\n", sleepTime);
 			} else if (strcmp(cmdBuffer, "fanPin") == 0){
 				fanPin = atoi(argBuffer);
-				printf("Fan Pin: %i\n", fanPin);
 			} else if (strcmp(cmdBuffer, "propGain") == 0){
-                                propGain = (float)atof(argBuffer);
-				printf("Proportional gain: %f\n", propGain);
+                         	propGain = (float)atof(argBuffer);
                         } else if (strcmp(cmdBuffer, "intGain") == 0){
                                 intGain = (float)atof(argBuffer);
-				printf("Integral gain: %f\n", intGain);
                         } else if (strcmp(cmdBuffer, "lowestError") == 0){
                                 lowestError = atof(argBuffer);
-				printf("Lowest Error: %f\n", lowestError);
                         }
 		}
 
 	}
 
-	free(lineBuffer);
+//	free(lineBuffer);
 	free(cmdBuffer);
 	free(argBuffer);
 	fclose(confFile);
@@ -145,7 +144,7 @@ int main(int argc, char **argv){
 		if(error <= LOWEST_ERROR){
 			errorSum = 0;
 		}
-
+		printf("Effort: %i\n", effort);
 		pwmWrite(fanPin, effort);
 		sleep(sleepTime);
 	}
