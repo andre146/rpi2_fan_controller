@@ -82,7 +82,7 @@ int main(int argc, char **argv){
 
 	while(filePos < fileLen -1){
 		fgets(lineBuffer, fileLen, confFile);
-
+		printf("reading...");
 		if(lineBuffer[0] != '#'){
 			cmdBuffer = strtok(lineBuffer, " ");
 			argBuffer = strtok(NULL, " ");
