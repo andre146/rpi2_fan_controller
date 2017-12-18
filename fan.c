@@ -11,17 +11,11 @@
 #define PWM_RANGE 1024 //default pwm range
 #define SLEEP_TIME 3
 #define LOWEST_ERROR -5
-<<<<<<< HEAD
-
-#define PROP_GAIN 1.1
-#define INT_GAIN 0.2
-=======
 #define CONFIGFILE_PATH "fan.conf"
 #define DEFAULT_PROP_GAIN 1
 #define DEFAULT_INT_GAIN 1
 
 char fanPin = FAN_PIN; //sorry I won't do it again I promise...
->>>>>>> config
 
 float getTemp(){ //reads the temperature and returns it in degree celsius
 
