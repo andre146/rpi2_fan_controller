@@ -144,7 +144,7 @@ int main(int argc, char **argv){
 		if(error <= LOWEST_ERROR){
 			errorSum = 0;
 		}
-		printf("Effort: %i\n", effort);
+
 		pwmWrite(fanPin, effort);
 		sleep(sleepTime);
 	}
