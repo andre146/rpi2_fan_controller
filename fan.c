@@ -156,7 +156,6 @@ int main(int argc, char **argv){
 		if(error <= LOWEST_ERROR){ //stop if error gets too low
 			errorSum = 0;
 		}
-
 		pwmWrite(fanPin, effort);
 		sleep(sleepTime);
 	}
