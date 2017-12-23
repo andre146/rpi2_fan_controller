@@ -125,7 +125,7 @@ int main(int argc, char **argv){
 	printf("Sleeptime: %i\n", sleepTime);
 	printf("Proportional gain: %f\n", propGain);
 	printf("Integral gain: %f\n", intGain);
-	printf("Lowest Error: %f\n", lowestError);
+	printf("Lowest Error: %f\n\n", lowestError);
 
 	signal(SIGINT, cleanup); //initializing a signal handler to call cleanup() when pressing CTRL+C
 
@@ -156,6 +156,8 @@ int main(int argc, char **argv){
 		if(error <= LOWEST_ERROR){ //stop if error gets too low
 			errorSum = 0;
 		}
+		printf("\rEffort: %i\t", effort);
+		fflush(stdout);
 		pwmWrite(fanPin, effort);
 		sleep(sleepTime);
 	}
