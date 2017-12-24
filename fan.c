@@ -10,7 +10,6 @@
 #define FAN_PIN 1 //default pin
 #define PWM_RANGE 1024 //default pwm range
 #define SLEEP_TIME 3
-#define LOWEST_ERROR -5
 #define CONFIGFILE_PATH "fan.conf"
 #define DEFAULT_PROP_GAIN 1
 #define DEFAULT_INT_GAIN 1
@@ -58,7 +57,6 @@ int main(int argc, char **argv){
 	int setTemp = atoi(argv[1]);
 	int effort = 0; // the controller output
 	int sleepTime = SLEEP_TIME;
-	float lowestError = LOWEST_ERROR; // the lowest error that we can tolerate
 	float error = 0; // error, in this case actual value - setpoint
 	float errorSum = 0; // error sum for integration
 	float propEffort = 0; // proportional output
@@ -66,7 +64,7 @@ int main(int argc, char **argv){
 	float propGain = DEFAULT_PROP_GAIN; // the controllers gains
 	float intGain = DEFAULT_INT_GAIN;
 
-	printf("Starting PI-Based fan controller v1.0 by Andre Picker\n");
+	printf("Starting PI-Based fan controller by Andre Picker\n");
 
 	/*
 	Now follows the parsing of the config file
@@ -109,23 +107,20 @@ int main(int argc, char **argv){
                          	propGain = (float)atof(argBuffer);
                         } else if (strcmp(cmdBuffer, "intGain") == 0){
                                 intGain = (float)atof(argBuffer);
-                        } else if (strcmp(cmdBuffer, "lowestError") == 0){
-                                lowestError = atof(argBuffer);
                         }
 		}
 
 	}
 
-//	free(lineBuffer); //does not fucking work for some fucking reason
+//	free(lineBuffer); //does not work for some reason
 	free(cmdBuffer);
 	free(argBuffer);
 	fclose(confFile);
 
 	printf("Fan Pin: %i\n", fanPin);
 	printf("Sleeptime: %i\n", sleepTime);
-	printf("Proportional gain: %f\n", propGain);
-	printf("Integral gain: %f\n", intGain);
-	printf("Lowest Error: %f\n\n", lowestError);
+	printf("Proportional gain: %.4f\n", propGain);
+	printf("Integral gain: %.4f\n\n", intGain);
 
 	signal(SIGINT, cleanup); //initializing a signal handler to call cleanup() when pressing CTRL+C
 
@@ -153,9 +148,7 @@ int main(int argc, char **argv){
 		if(intEffort > PWM_RANGE){ //make sure that errorSum cannot go extremely high
 			errorSum = PWM_RANGE / sleepTime / intGain;
 		}
-		if(error <= LOWEST_ERROR){ //stop if error gets too low
-			errorSum = 0;
-		}
+		
 		printf("\rEffort: %i\t", effort);
 		fflush(stdout);
 		pwmWrite(fanPin, effort);
