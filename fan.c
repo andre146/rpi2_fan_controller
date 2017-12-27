@@ -148,7 +148,11 @@ int main(int argc, char **argv){
 		if(intEffort > PWM_RANGE){ //make sure that errorSum cannot go extremely high
 			errorSum = PWM_RANGE / sleepTime / intGain;
 		}
-		
+
+		if(intEffort < 0){
+			errorSum = 0;
+		}
+
 		printf("\rEffort: %i\t", effort);
 		fflush(stdout);
 		pwmWrite(fanPin, effort);
