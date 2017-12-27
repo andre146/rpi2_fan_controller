@@ -14,7 +14,7 @@
 #define DEFAULT_PROP_GAIN 1
 #define DEFAULT_INT_GAIN 1
 
-char fanPin = FAN_PIN; //sorry I won't do it again I promise...
+unsigned char fanPin = FAN_PIN; //sorry I won't do it again I promise...
 
 float getTemp(){ //reads the temperature and returns it in degree celsius
 
@@ -50,8 +50,12 @@ void cleanup(){ //resets the gpio pins
 int main(int argc, char **argv){
 
 	if(argc <= 1){ // we need one argument which is the desired temperatue
-		printf("Usage: <temp>\n");
-		return(1);
+	  printf("Usage: <temp>\n");
+	  return(1);
+	}
+	if(geteuid() != 0){
+	  printf("This program must be run as root!\n");
+	  return(1);
 	}
 
 	int setTemp = atoi(argv[1]);
@@ -78,14 +82,14 @@ int main(int argc, char **argv){
 	char *argBuffer; //contains the value
 
 	if(confFile == NULL){
-		printf("Failed to open config file fan.conf!\n");
+	  printf("Failed to open config file %s!\n", CONFIGFILE_PATH);
 		return(1);
 	}
 
-	fseek(confFile, 0, SEEK_END); //getting file length as usual
+	fseek(confFile, 0, SEEK_END); //getting file length
 	fileLen = ftell(confFile) + 1;
 	fseek(confFile, 0, SEEK_SET);
-	lineBuffer = malloc(fileLen + 1); //and allocating enough memory
+	lineBuffer = malloc(fileLen + 1); //allocating enough memory
 	cmdBuffer = malloc(fileLen + 1);
 	argBuffer = malloc(fileLen + 1);
 
@@ -149,7 +153,7 @@ int main(int argc, char **argv){
 			errorSum = PWM_RANGE / sleepTime / intGain;
 		}
 
-		if(intEffort < 0){
+		if(intEffort < 0){ //make sure error sum cannot go extremely low 
 			errorSum = 0;
 		}
 
