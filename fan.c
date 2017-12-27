@@ -49,15 +49,17 @@ void cleanup(){ //resets the gpio pins
 
 int main(int argc, char **argv){
 
-	if(argc <= 1){ // we need one argument which is the desired temperatue
+	if(argc <= 1){ //one argument is required which is the set temperatue
 	  printf("Usage: <temp>\n");
 	  return(1);
 	}
-	if(geteuid() != 0){
+	if(geteuid() != 0){ //check if run with root privileges. Running as a normal user leads to a system crash!
 	  printf("This program must be run as root!\n");
 	  return(1);
 	}
 
+	/*declaring and initializing some variables*/
+	
 	int setTemp = atoi(argv[1]);
 	int effort = 0; // the controller output
 	int sleepTime = SLEEP_TIME;
@@ -65,8 +67,8 @@ int main(int argc, char **argv){
 	float errorSum = 0; // error sum for integration
 	float propEffort = 0; // proportional output
 	float intEffort = 0; // integral output
-	float propGain = DEFAULT_PROP_GAIN; // the controllers gains
-	float intGain = DEFAULT_INT_GAIN;
+	float propGain = DEFAULT_PROP_GAIN; // the proportinal controller gain
+	float intGain = DEFAULT_INT_GAIN; // the integral controller gain
 
 	printf("Starting PI-Based fan controller by Andre Picker\n");
 
@@ -77,8 +79,8 @@ int main(int argc, char **argv){
 	FILE *confFile = fopen(CONFIGFILE_PATH, "rb"); 
 	long fileLen = 0;
 	long filePos = 0;
-	char *lineBuffer; //this contains one single line
-	char *cmdBuffer; //contains the "command"
+	char *lineBuffer; //later holds one single line
+	char *cmdBuffer; //contains the variable to be set
 	char *argBuffer; //contains the value
 
 	if(confFile == NULL){
@@ -97,13 +99,14 @@ int main(int argc, char **argv){
 		fgets(lineBuffer, fileLen, confFile);
 		filePos = ftell(confFile);
 
-		if(lineBuffer[0] != '#'){ //ignores comments completely
+		if(lineBuffer != NULL || lineBuffer[0] != '#'){ //ignores line if it is a comment or NULL
 			cmdBuffer = strtok(lineBuffer, " "); // split at space character
 			argBuffer = strtok(NULL, " ");
+			
 			if(argBuffer == NULL || cmdBuffer == NULL){
 				continue;
 			}
-			if(strcmp(cmdBuffer, "sleep") == 0){ //switch depending on "command"
+			if(strcmp(cmdBuffer, "sleep") == 0){ //switch depending on variable
 				sleepTime = atoi(argBuffer);
 			} else if (strcmp(cmdBuffer, "fanPin") == 0){
 				fanPin = atoi(argBuffer);
@@ -113,7 +116,6 @@ int main(int argc, char **argv){
                                 intGain = (float)atof(argBuffer);
                         }
 		}
-
 	}
 
 //	free(lineBuffer); //does not work for some reason
@@ -126,7 +128,7 @@ int main(int argc, char **argv){
 	printf("Proportional gain: %.4f\n", propGain);
 	printf("Integral gain: %.4f\n\n", intGain);
 
-	signal(SIGINT, cleanup); //initializing a signal handler to call cleanup() when pressing CTRL+C
+	signal(SIGINT, cleanup); //initializing a signal handler to call cleanup() when an interrupt signal is sent
 
         wiringPiSetup(); //setting up the wiringPi lib
         pwmSetRange(PWM_RANGE);
