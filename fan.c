@@ -12,7 +12,7 @@
 #define SLEEP_TIME 3
 #define CONFIGFILE_PATH "fan.conf"
 #define DEFAULT_PROP_GAIN 1
-#define DEFAULT_INT_GAIN 1
+#define DEFAULT_INT_GAIN 0
 
 unsigned char fanPin = FAN_PIN; //sorry I won't do it again I promise...
 
@@ -33,7 +33,6 @@ float getTemp(){ //reads the temperature and returns it in degree celsius
 
 	fgets(buffer, fileLen, tempFile);
 	fclose(tempFile);
-	free(buffer);
 
 	return((float)atof(buffer) / 1000);
 
@@ -155,7 +154,7 @@ int main(int argc, char **argv){
 			errorSum = PWM_RANGE / sleepTime / intGain;
 		}
 
-		if(intEffort < 0){ //make sure error sum cannot go extremely low 
+		if(intEffort < 0){ //make sure errorSum cannot go extremely low 
 			errorSum = 0;
 		}
 
