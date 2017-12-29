@@ -23,7 +23,7 @@ Using a PC fan with a seperate PWM input has not been tested yet.
 For fans without seperate PWM inputs (two or three wires):
 DO NOT USE THE GPIO PIN TO DRIVE THE FAN DIRECTLY!
 Doing this will damage your Pi!
-Instead use the GPIO Pin to drive a transitor that can handle your fans maximum current. Then use the transistor to drive the fan
+Instead use the GPIO Pin to drive a transitor that can handle your fans maximum current. Then use the transistor to drive the fan.
 Additionally a electrolytic capacitor connected in parallel to your fan in recommended.
 
 Have fun!
