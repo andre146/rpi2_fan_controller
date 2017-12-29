@@ -1,5 +1,5 @@
 # rpi2_fan_controller
-A PI-controller that keeps your Raspberry Pi 2 cool by driving a fan with hardware PWM
+A PI-controller that keeps your Raspberry Pi 2 cool by driving a fan with hardware PWM.
 Author: André Picker
 
 This program can drive a fan by utilizing hardware PWM to cool your Raspberry Pi.
