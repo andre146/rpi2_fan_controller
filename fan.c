@@ -76,8 +76,8 @@ int main(int argc, char **argv){
 	*/
 
 	FILE *confFile = fopen(CONFIGFILE_PATH, "rb"); 
-	long *fileLen = malloc(sizeof(long));
-	long *filePos = malloc(sizeof(long));
+	long fileLen = 0;
+	long filePos = 0;
 	char *lineBuffer; //later holds one single line
 	char *cmdBuffer; //contains the variable to be set
 	char *argBuffer; //contains the value
@@ -87,17 +87,16 @@ int main(int argc, char **argv){
 		return(1);
 	}
 
-	*filePos = 0;
 	fseek(confFile, 0, SEEK_END); //getting file length
-	*fileLen = ftell(confFile) + 1;
+	fileLen = ftell(confFile) + 1;
 	fseek(confFile, 0, SEEK_SET);
-	lineBuffer = malloc(*fileLen + 1); //allocating enough memory
-	cmdBuffer = malloc(*fileLen + 1);
-	argBuffer = malloc(*fileLen + 1);
+	lineBuffer = malloc(fileLen + 1); //allocating enough memory
+	cmdBuffer = malloc(fileLen + 1);
+	argBuffer = malloc(fileLen + 1);
 
-	while(*filePos < *fileLen - 1){ //walking through the file line by line by utilising fgets() which stops at \n
-		fgets(lineBuffer, *fileLen, confFile);
-		*filePos = ftell(confFile);
+	while(filePos < fileLen - 1){ //walking through the file line by line by utilising fgets() which stops at \n
+		fgets(lineBuffer, fileLen, confFile);
+		filePos = ftell(confFile);
 
 		if(lineBuffer != NULL || lineBuffer[0] != '#'){ //ignores line if it is a comment or NULL
 			cmdBuffer = strtok(lineBuffer, " "); // split at space character
@@ -121,8 +120,6 @@ int main(int argc, char **argv){
 //	free(lineBuffer); //does not work for some reason
 	free(cmdBuffer);
 	free(argBuffer);
-	free(fileLen);
-	free(filePos);
 	fclose(confFile);
 
 	printf("Fan Pin: %i\n", fanPin);
