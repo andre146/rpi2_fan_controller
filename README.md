@@ -11,12 +11,12 @@ You can install wiring pi by executing the following line: sudo apt install wiri
 After cloning the repository to a directory on your Raspberry Pi, type 'make' to compile
 It should finish without warnings or errors if wiring pi is installed properly
 
-How to use:
+<b>How to use:</b>
 Change the settings in fan.conf to how you need them. Tuning the proportional and integral controller might take some time later.
 Execute with 'sudo ./fan temperature' substitute temperatue with the temperature in °C the Raspberry Pi should stay at
 It is recommended to use something like screen to run the software in the background.
 
-How to connect your fan:
+<b>How to connect your fan:</b>
 For fans with seperate PWM inputs (usually four wires):
 Using a PC fan with a seperate PWM input has not been tested yet.
 
