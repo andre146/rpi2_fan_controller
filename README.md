@@ -26,4 +26,7 @@ Doing this will damage your Pi!
 Instead use the GPIO Pin to drive a transitor that can handle your fans maximum current. Then use the transistor to drive the fan.
 Additionally a electrolytic capacitor connected in parallel to your fan in recommended.
 
+<b>How to tune:</b>
+Tuning the proportional and integral controller is as easy as starting with very small values and increasing them until the system becomes unstable. Then go back to the last stable values. The values you need depend entirely on your setup. For me, 1.1 for the proportional gain and 0.2 for the integral gain works fine.
+
 Have fun!
