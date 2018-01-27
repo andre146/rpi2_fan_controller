@@ -20,9 +20,7 @@ float getTemp(){ //reads the temperature and returns it in degree celsius
 
 	FILE *tempFile = fopen(TEMPFILE_PATH, "r"); //open the file
 	long fileLen;
-	char *buffer;
-	float output = 0;
-	
+
 	if(tempFile == NULL){ //check if opened correctly
                 return(-1);
         }
@@ -30,19 +28,17 @@ float getTemp(){ //reads the temperature and returns it in degree celsius
 	fseek(tempFile, 0, SEEK_END); //go to the end
 	fileLen = ftell(tempFile) + 1;//get the length
 	fseek(tempFile, 0, SEEK_SET);//go to the start
-	buffer = malloc(fileLen + 1);
+	char buffer[fileLen + 1];
 
 	if(buffer == NULL){
 	  fclose(tempFile);
 	  return(-1);
 	}
-	
+
 	fgets(buffer, fileLen, tempFile);
-	output = (float)atof(buffer) / 1000;
-	free(buffer);
 	fclose(tempFile);
 
-	return(output);
+	return((float)atof(buffer) / 1000);
 
 }
 
