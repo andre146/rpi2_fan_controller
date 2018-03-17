@@ -70,6 +70,7 @@ int main(int argc, char **argv){
 	float errorSum = 0; // error sum for integration
 	float propEffort = 0; // proportional output
 	float intEffort = 0; // integral output
+	float tmpIntEffort = 0; //temporary integral output storage
 	float propGain = DEFAULT_PROP_GAIN; // the proportinal controller gain
 	float intGain = DEFAULT_INT_GAIN; // the integral controller gain
 
@@ -150,18 +151,14 @@ int main(int argc, char **argv){
 
 		if(effort > PWM_RANGE){ //clamp the effort to the range of the pwm value
 			effort = PWM_RANGE;
+			intEffort = tmpIntEffort;
 		} else if(effort < 0){
 			effort = 0;
-		}
-
-		if(intEffort > PWM_RANGE){ //make sure that errorSum cannot go extremely high
-			errorSum = PWM_RANGE / sleepTime / intGain;
-		}
-
-		if(intEffort < 0){ //make sure errorSum cannot go extremely low 
-			errorSum = 0;
-		}
-
+			intEffort = tmpIntEffort;
+		} else{
+			tmpIntEffort = intEffort;
+		}	
+		
 		printf("\rEffort: %i\t", effort);
 		fflush(stdout);
 		pwmWrite(fanPin, effort);
